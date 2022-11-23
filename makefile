@@ -23,5 +23,6 @@ debug:
 	@echo $(patsubst %.asm,%.bin,$(subst src/,,$(wildcard $(SRC_PATH)*.asm)))
 
 dd:
+	@dd if=/dev/zero of=master.img bs=512 count=32 conv=notrunc
 	@dd if=bin/bootloaderOne_v3.bin of=master.img bs=512 count=1 conv=notrunc
 	@dd if=bin/user_test_v3.bin of=master.img bs=512 count=3 seek=1 conv=notrunc

@@ -6,21 +6,22 @@ BIN = $(patsubst %.asm,%.bin,$(subst src/,,$(wildcard $(SRC_PATH)*.asm)))
 
 # file serch
 vpath %.asm $(SRC_PATH)
+vpath %.bin $(BIN_PATH)
 #VPATH = src
 
 all: $(BIN)
 
 %.bin: %.asm
-	$(AS) $< -o $@
+	$(AS) $< -o $(BIN_PATH)$@ -O0
 
-
-.PHONY:clean syn
+.PHONY:clean debug
 
 clean:
-	-rm -rf *.bin bx_enh_dbg.ini
+	-rm -rf bin/*.bin bx_enh_dbg.ini
 
-syn:
-	-rm -rf /home/yoyoki/Documents/Obsidian\ Vault/CS/OperatingSystem/x86_nasm_md/x86Asm_FromRealModeToProtectMode.md
-	-rm -rf /home/yoyoki/Documents/Obsidian\ Vault/CS/OperatingSystem/x86_nasm_md/pic/*
-	-cp ./doc/x86Asm_FromRealModeToProtectMode.md /home/yoyoki/Documents/Obsidian\ Vault/CS/OperatingSystem/x86_nasm_md/
-	-cp ./doc/pic/* /home/yoyoki/Documents/Obsidian\ Vault/CS/OperatingSystem/x86_nasm_md/pic/
+debug:
+	@echo $(patsubst %.asm,%.bin,$(subst src/,,$(wildcard $(SRC_PATH)*.asm)))
+
+dd:
+	@dd if=bin/bootloaderOne_v3.bin of=master.img bs=512 count=1 conv=notrunc
+	@dd if=bin/user_test_v3.bin of=master.img bs=512 count=3 seek=1 conv=notrunc
